@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse
 from .models import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -6,16 +6,16 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CreateUserForm
-from .decorators import unauthenticated_user,allowed_users,admin_only
 
 
 
-
+def index(request):
+    return HttpResponse('hello')
        
    
 
 
-@unauthenticated_user
+
 def loginpage(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -23,13 +23,13 @@ def loginpage(request):
         user=authenticate(request,username=username,password=pass1)
         if user is not None:
             login(request,user)
-            return redirect('booking')
+            return redirect('/')
         else:
             messages.success(request, "username or password is incorrect")
     context ={}
-    return render(request, 'studio/login.html', context)
+    return render(request, 'base/login.html', context)
 
-@unauthenticated_user
+
 def signuppage(request):
     form=CreateUserForm()
     if request.method == 'POST':
@@ -41,7 +41,7 @@ def signuppage(request):
             return redirect('loginpage')
         
     context ={'form':form}
-    return render(request, 'studio/signup.html', context)
+    return render(request, 'base/signup.html', context)
 def logoutPage(request):
     logout(request)
     return redirect('loginpage')
