@@ -10,7 +10,7 @@ from .forms import CreateUserForm
 
 
 def index(request):
-    return HttpResponse('hello')
+    return render(request, 'base/index.html')
        
    
 
